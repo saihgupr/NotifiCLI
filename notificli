@@ -97,7 +97,7 @@ if [ -n "$VARIANT_NAME" ]; then
     if [ ! -f "$VARIANT_PATH" ]; then
          if [ -n "$APP_PATH_ARG" ]; then
               echo "⚙️  Generating new icon variant for '${VARIANT_NAME}'..."
-              "${PROJECT_DIR}/add-icon.sh" "$APP_PATH_ARG" "$VARIANT_NAME"
+              "${APP_DIR}/Contents/Resources/add-icon.sh" "$APP_PATH_ARG" "$VARIANT_NAME"
               EXIT_CODE=$?
               if [ $EXIT_CODE -ne 0 ]; then
                   echo "⚠️  Icon generation failed (Code $EXIT_CODE). Falling back to default icon."

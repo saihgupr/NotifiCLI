@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BUILD_DIR="build"
 ICONS_DIR="icons"
 BACKUP_DIR=".build_backup"
@@ -149,10 +150,17 @@ if [ -d "$ICONS_DIR" ]; then
     done
 fi
 
-# --- 4. Install wrapper script into the app bundle ---
+# --- 4. Install wrapper script and support files into the app bundle ---
 echo "📦 Installing wrapper script..."
 cp "${DIR}/notificli" "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/notificli"
 chmod +x "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/notificli"
+
+# Bundle add-icon.sh and extract-icon.swift for runtime icon generation
+RESOURCES_DIR="${BUILD_DIR}/NotifiCLI.app/Contents/Resources"
+mkdir -p "${RESOURCES_DIR}/scripts"
+cp "${DIR}/add-icon.sh" "${RESOURCES_DIR}/add-icon.sh"
+chmod +x "${RESOURCES_DIR}/add-icon.sh"
+cp "${DIR}/scripts/extract-icon.swift" "${RESOURCES_DIR}/scripts/extract-icon.swift"
 
 # --- 5. Attempt to Install to /Applications ---
 INSTALLED_APPS_DIR="/Applications/NotifiCLI.app/Contents/Apps"
@@ -160,9 +168,14 @@ if [ -d "$INSTALLED_APPS_DIR" ] && [ -w "$INSTALLED_APPS_DIR" ]; then
     echo "📦 Installing variants to /Applications..."
     # Copy all apps from the embedded Apps folder to ensure all variants are updated
     cp -R "$APPS_DIR/"* "$INSTALLED_APPS_DIR/"
-    # Install wrapper script
+    # Install wrapper script and support files
     cp "${DIR}/notificli" "/Applications/NotifiCLI.app/Contents/MacOS/notificli"
     chmod +x "/Applications/NotifiCLI.app/Contents/MacOS/notificli"
+    INSTALLED_RESOURCES="/Applications/NotifiCLI.app/Contents/Resources"
+    mkdir -p "${INSTALLED_RESOURCES}/scripts"
+    cp "${DIR}/add-icon.sh" "${INSTALLED_RESOURCES}/add-icon.sh"
+    chmod +x "${INSTALLED_RESOURCES}/add-icon.sh"
+    cp "${DIR}/scripts/extract-icon.swift" "${INSTALLED_RESOURCES}/scripts/extract-icon.swift"
     echo "✅ Installed all variants to /Applications/NotifiCLI.app"
 fi
 

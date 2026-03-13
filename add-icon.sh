@@ -6,12 +6,15 @@ set -e
 
 # Resolve script directory
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$DIR"
 
 APP_PATH="$1"
 VARIANT_NAME="$2"
-ICONS_DIR="icons"
-BUILD_DIR="build"
+
+# Use ~/.notificli as writable working directory (script may be inside read-only app bundle)
+WORK_DIR="${HOME}/.notificli"
+ICONS_DIR="${WORK_DIR}/icons"
+BUILD_DIR="${WORK_DIR}/build"
+mkdir -p "$ICONS_DIR" "$BUILD_DIR"
 
 if [ -z "$APP_PATH" ] || [ -z "$VARIANT_NAME" ]; then
     echo "Usage: ./add-icon.sh \"/path/to/App.app\" VariantName"
