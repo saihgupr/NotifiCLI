@@ -38,7 +38,7 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 </table>
 
 <details>
-<summary>📋 <b>Full Parameter List & Arguments</b></summary>
+<summary><b>Full Parameter List & Arguments</b></summary>
 
 ### Arguments
 | Flag | Shorthand | Description |
@@ -67,7 +67,7 @@ When using `-actions`, `-reply`, or `-url`, the command waits for user interacti
 To use persistent alerts (notifications that don't disappear), use the `-p` or `-persistent` flag.
 
 <details>
-<summary>⚙️ <b>Setup & Configuration</b></summary>
+<summary><b>Setup & Configuration</b></summary>
 
 **Naming Convention:**
 Standard variants and Persistent variants are separated in macOS settings so you can have different rules for each:
@@ -101,7 +101,7 @@ fi
 ```
 
 <details>
-<summary>⚡ <b>Advanced: Multi-Step & User Interaction</b></summary>
+<summary><b>Advanced: Multi-Step & User Interaction</b></summary>
 
 ### Multi-Step Workflow
 Chain notifications for complex interactive scripts:
@@ -157,7 +157,7 @@ brew install --cask notificli
 ```
 
 <details>
-<summary>🛠️ <b>Manual Installation & Build</b></summary>
+<summary><b>Manual Installation & Build</b></summary>
 
 ### Manual Installation
 1. **Download NotifiCLI.dmg** from [Releases](https://github.com/saihgupr/NotifiCLI/releases)
@@ -176,16 +176,14 @@ brew install --cask notificli
 ```
 </details>
 
-## Keyboard Maestro Plug-in
+<details>
+<summary><b>Keyboard Maestro Plug-in</b></summary>
 
 <img src="images/km.png?raw=true" width="600">
 
 NotifiCLI includes a native **Keyboard Maestro Action** for easy integration into your macros.
 
-<details>
-<summary>📦 <b>Keyboard Maestro Setup Guide</b></summary>
-
-### Installation
+### Installation Guide
 1. **Install the main app first**: Ensure `NotifiCLI.app` is in your `/Applications` folder.
 2. Download the action folder from [here](https://github.com/saihgupr/NotifiCLI/tree/main/Keyboard-Maestro-Action/NotifiCLI).
 3. Move the contents of the folder to:
@@ -215,7 +213,7 @@ notificli -icon 'Terminal' -title 'Build' -message 'Complete'
 ```
 
 <details>
-<summary>🎨 <b>Advanced: Automatic Caching & Permissions</b></summary>
+<summary><b>Advanced: Automatic Caching & Permissions</b></summary>
 
 ### Automatic Caching
 The first time you use a new icon, NotifiCLI creates a variant (takes ~1 second). Subsequent uses are instant.
@@ -240,7 +238,7 @@ notificli -icon 'Spotify' -title 'Now Playing' -message 'Song Name'
 ## Troubleshooting
 
 <details>
-<summary>⛑️ <b>Common Issues & Fixes</b></summary>
+<summary><b>Common Issues & Fixes</b></summary>
 
 **"Notifications are not allowed"**
 1. **The Finder Trick**: Navigate to `/Applications/NotifiCLI.app/Contents/Apps`, right-click the variant, and choose **Open**.
