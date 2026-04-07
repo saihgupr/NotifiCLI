@@ -15,7 +15,7 @@ Unlike `terminal-notifier`, NotifiCLI offers:
     <td align="center" valign="top" width="50%">
       <b>Action Buttons</b><br>
       <img src="images/actions.png?raw=true" width="100%"><br>
-      <code>notificli -title "Deploy to Production?" -message "Version 1.1.0 is ready." -actions "Deploy Now,Schedule Later,Cancel"</code>
+      <code>notificli -title "Deploy to Production?" -message "Version 1.4.0 is ready." -actions "Deploy Now,Schedule Later,Cancel"</code>
     </td>
     <td align="center" valign="top" width="50%">
       <b>Reply Input</b><br>
@@ -37,6 +37,8 @@ Unlike `terminal-notifier`, NotifiCLI offers:
   </tr>
 </table>
 
+<details>
+<summary>📋 <b>Full Parameter List & Arguments</b></summary>
 
 ### Arguments
 | Flag | Shorthand | Description |
@@ -58,11 +60,14 @@ When using `-actions`, `-reply`, or `-url`, the command waits for user interacti
 - **Reply**: Prints the user's typed text directly
 - **Dismiss**: Prints `dismissed`
 - **Click notification**: Prints `default` (and opens URL if specified)
-
+</details>
 
 ## Persistent Mode
 
 To use persistent alerts (notifications that don't disappear), use the `-p` or `-persistent` flag.
+
+<details>
+<summary>⚙️ <b>Setup & Configuration</b></summary>
 
 **Naming Convention:**
 Standard variants and Persistent variants are separated in macOS settings so you can have different rules for each:
@@ -74,8 +79,9 @@ Standard variants and Persistent variants are separated in macOS settings so you
 2. Open **System Settings > Notifications**.
 3. Find the entry ending in **(Persistent)**.
 4. Change the **Alert Style** from *Banners* to **Alerts** (Persistent).
+</details>
 
-## Scripting Example
+## Scripting Examples
 
 NotifiCLI pauses execution until the user clicks a button. Capture the output to drive your logic:
 
@@ -94,15 +100,17 @@ else
 fi
 ```
 
-### Advanced: Multi-Step Workflow
+<details>
+<summary>⚡ <b>Advanced: Multi-Step & User Interaction</b></summary>
 
+### Multi-Step Workflow
 Chain notifications for complex interactive scripts:
 
 ```bash
 #!/bin/bash
 RESPONSE=$(notificli -persistent \
   -title 'Deploy to Production?' \
-  -message 'Version 1.1.0 is ready.' \
+  -message 'Version 1.4.0 is ready.' \
   -actions 'Deploy Now,Schedule Later,Cancel' \
   -icon 'Terminal' -sound 'Glass')
 
@@ -110,7 +118,7 @@ case "$RESPONSE" in
   'Deploy Now')
     notificli -title 'Deploying!' -message 'Pushing to production...'
     # ... run deploy script ...
-    notificli -title 'Success!' -message 'v1.1.0 is now live!' -sound 'Glass'
+    notificli -title 'Success!' -message 'v1.4.0 is now live!' -sound 'Glass'
     ;;
   'Schedule Later')
     WHEN=$(notificli -persistent -title 'Schedule Deploy' \
@@ -123,24 +131,19 @@ case "$RESPONSE" in
 esac
 ```
 
-## User Interaction
-
 ### Reply Input
-Capture user input directly from the notification:
-
+Capture user input directly:
 ```bash
 OUTPUT=$(notificli -title 'Status' -message 'Update status?' -reply 'Type here')
 echo "You typed: $OUTPUT"
 ```
 
 ### Open URL
-Open a link when the user clicks the notification body:
-
+Open a link when the user clicks:
 ```bash
 notificli -title 'Build Failed' -message 'Click to view logs' -url 'https://github.com/my/repo/actions'
 ```
-
-
+</details>
 
 ## Installation
 
@@ -153,9 +156,11 @@ brew tap saihgupr/notificli
 brew install --cask notificli
 ```
 
-### Manual Installation
+<details>
+<summary>🛠️ <b>Manual Installation & Build</b></summary>
 
-1. **Download NotifiCLI.dmg** from [Releases](https://github.com/saihgupr/NotifiCLI/releases) (v1.4.0+)
+### Manual Installation
+1. **Download NotifiCLI.dmg** from [Releases](https://github.com/saihgupr/NotifiCLI/releases)
 2. **Open the DMG** and drag `NotifiCLI.app` to your `Applications` folder.
 3. **Grant permissions**:
    - Double-click `NotifiCLI.app` to allow notifications.
@@ -166,10 +171,10 @@ brew install --cask notificli
    ```
 
 ### Build from Source
-
 ```bash
 ./build.sh
 ```
+</details>
 
 ## Keyboard Maestro Plug-in
 
@@ -177,84 +182,76 @@ brew install --cask notificli
 
 NotifiCLI includes a native **Keyboard Maestro Action** for easy integration into your macros.
 
+<details>
+<summary>📦 <b>Keyboard Maestro Setup Guide</b></summary>
+
 ### Installation
-1. **Install the main app first**: Download `NotifiCLI.zip`, unzip it, and move `NotifiCLI.app` to your `/Applications` or `~/Applications` folder.
-2. Download the folder contents from [here](https://github.com/saihgupr/NotifiCLI/tree/main/Keyboard-Maestro-Action/NotifiCLI).
+1. **Install the main app first**: Ensure `NotifiCLI.app` is in your `/Applications` folder.
+2. Download the action folder from [here](https://github.com/saihgupr/NotifiCLI/tree/main/Keyboard-Maestro-Action/NotifiCLI).
 3. Move the contents of the folder to:
    `~/Library/Application Support/Keyboard Maestro/Keyboard Maestro Actions/NotifiCLI`
-   *(Tip: Press Command+Shift+G in Finder and paste that path)*
 4. Restart the Keyboard Maestro Engine.
 
 > [!IMPORTANT]
 > **Security Warning (Gatekeeper)**
-> macOS may block the embedded `NotifiCLI` app because it is not notarized. If you see a "malicious software" warning or it fails to run:
-> 1. Go to the installed action folder: `~/Library/Application Support/Keyboard Maestro/Keyboard Maestro Actions/NotifiCLI`
+> macOS may block the embedded action. If it fails to run:
+> 1. Go to the action folder: `~/Library/Application Support/Keyboard Maestro/Keyboard Maestro Actions/NotifiCLI`
 > 2. Right-click `NotifiCLI.app` inside that folder and choose **Open**.
 > 3. Click **Open** in the dialog to whitelist it.
-> You only need to do this once.
 
-### Usage in Keyboard Maestro
+### Usage
 - Add the **"NotifiCLI"** action to your macro.
-- Fill in the Title, Subtitle, Message.
-- Use the **"Actions"** field to add comma-separated buttons.
-- The action saves the clicked button name to a variable (or clipboard) so you can use it in "If Then Else" actions.
-
+- Fill in the Title, Subtitle, and Message.
+- Use the **"Actions"** field for comma-separated buttons.
+- The action saves the result to a variable for use in "If Then Else" logic.
+</details>
 
 ## Custom Icons
 
-Use any app's icon for your notifications with the `-icon` flag:
+Use any app's icon for your notifications:
 
 ```bash
-notificli -icon '/Applications/Slack.app' -title 'Message' -message 'New DM received'
-```
-
-The first time you use a new icon, it auto-creates a variant (takes ~1 second). Subsequent uses are instant.
-
-**Shorthand:** Once a variant is created, you can use just the name:
-```bash
-# First time - uses full path
-notificli -icon '/System/Applications/Utilities/Terminal.app' -title 'Build' -message 'Complete'
-
-# After that - shorthand works
 notificli -icon 'Terminal' -title 'Build' -message 'Complete'
 ```
 
-**More examples:**
+<details>
+<summary>🎨 <b>Advanced: Automatic Caching & Permissions</b></summary>
+
+### Automatic Caching
+The first time you use a new icon, NotifiCLI creates a variant (takes ~1 second). Subsequent uses are instant.
 ```bash
-notificli -icon '/Applications/Keyboard Maestro.app' -title 'Macro' -message 'Finished'
-notificli -icon 'KeyboardMaestro' -title 'Macro' -message 'Finished'  # shorthand
+# Shorthand works after first run
+notificli -icon 'Spotify' -title 'Now Playing' -message 'Song Name'
 ```
 
-> **Note**: macOS caches app icons. If a new icon doesn't appear immediately, restart Notification Center: `killall NotificationCenter`.
->
-> **Important (macOS Sequoia/Tahoe)**: On newer macOS versions, each custom icon variant acts as a unique app. The first time you use a new icon, it may be blocked from sending notifications.
->
-> **The Fix**: The latest version automatically attempts to "bless" new variants by registering them with Launch Services. If you still see permissions errors, run this command to prompt for access for all variants:
+> [!IMPORTANT]
+> **macOS Security (Sequoia/Tahoe)**
+> Each custom icon variant acts as a unique app. The first time you use a new icon, it may be blocked.
+> **The Fix**: Run this command to prompt for access for all variants:
 > ```bash
 > find /Applications/NotifiCLI.app/Contents/Apps -name '*.app' -maxdepth 1 -exec open {} \;
 > ```
->
+
 > [!WARNING]
 > **Notification Preferences Bloat**
-> Each custom icon variant you create acts as a unique app bundle with its own settings. This means your **System Settings > Notifications** list will grow with an entry for every app icon you add (e.g., `Safari` and `Safari (Persistent)`). Be selective with which icons you generate if you want to keep that list tidy!
+> Each custom icon variant appears in **System Settings > Notifications**. Be selective with which icons you generate!
+</details>
 
 ## Troubleshooting
 
-**"Notifications are not allowed"**
-This happens when macOS blocks an ad-hoc signed variant from accessing system services.
+<details>
+<summary>⛑️ <b>Common Issues & Fixes</b></summary>
 
-1. **The Finder Trick**: This is the most reliable fix for Sequoia/Tahoe:
-   - Navigate to `/Applications/NotifiCLI.app/Contents/Apps`
-   - Right-click the failing variant (e.g., `NotifiCLI-Spotify.app`)
-   - Choose **Open**, then **Open Anyway** if prompted.
-2. **System Settings**: Check **System Settings > Notifications**. Look for the flat bundle name (e.g., `Calculator` or `Slack`) and ensure "Allow Notifications" is active.
-3. **Verify Location**: Ensure the main `NotifiCLI.app` is in `/Applications/`. macOS security is much stricter for apps run from "Downloads" or "Desktop".
+**"Notifications are not allowed"**
+1. **The Finder Trick**: Navigate to `/Applications/NotifiCLI.app/Contents/Apps`, right-click the variant, and choose **Open**.
+2. **System Settings**: Check **System Settings > Notifications** for the variant name and enable "Allow Notifications".
+3. **Verify Location**: Ensure `NotifiCLI.app` is in `/Applications/`.
+</details>
 
 ---
 
 ## Issues & Feedback
 
 Found a bug or have a feature request? [Open an issue](https://github.com/saihgupr/NotifiCLI/issues)
-
 
 If you like this project, please consider giving the repo a star!
