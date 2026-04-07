@@ -155,7 +155,7 @@ brew install --cask notificli
 
 ### Manual Installation
 
-1. **Download NotifiCLI.dmg** from [Releases](https://github.com/saihgupr/NotifiCLI/releases) (v1.3.4+)
+1. **Download NotifiCLI.dmg** from [Releases](https://github.com/saihgupr/NotifiCLI/releases) (v1.4.0+)
 2. **Open the DMG** and drag `NotifiCLI.app` to your `Applications` folder.
 3. **Grant permissions**:
    - Double-click `NotifiCLI.app` to allow notifications.
