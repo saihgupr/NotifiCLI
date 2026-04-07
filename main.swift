@@ -108,6 +108,9 @@ _ = authSemaphore.wait(timeout: .now() + 5.0)
 
 if !authGranted {
     fputs("Error: Notifications are not allowed for bundle '\(bundleID)'. Please check System Settings.\n", stderr)
+    
+    // Give the system a moment to show the prompt before we exit
+    Thread.sleep(forTimeInterval: 2.0)
     exit(1)
 }
 

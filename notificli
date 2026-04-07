@@ -164,14 +164,14 @@ if [ $EXIT_CODE -ne 0 ] && [[ "$OUTPUT" == *"Notifications are not allowed"* ]];
     if [ -n "$VARIANT_APP" ]; then
         TARGET_BUNDLE="$VARIANT_APP"
         if [ "$IS_PERSISTENT" -eq 1 ]; then
-            FRIENDLY_NAME="${BASE_NAME} (Persistent)"
+            FRIENDLY_NAME="${BASE_NAME} Persistent"
         else
             FRIENDLY_NAME="${BASE_NAME}"
         fi
     else
         # For base app, we need to target the bundle that owns the notifications
         if [ "$IS_PERSISTENT" -eq 1 ]; then
-            FRIENDLY_NAME="NotifiCLI (Persistent)"
+            FRIENDLY_NAME="NotifiCLI Persistent"
             # Persistent base app is in Contents/Apps/
             if [ -d "${APP_DIR}/Contents/Apps/NotifiPersistent.app" ]; then
                 TARGET_BUNDLE="${APP_DIR}/Contents/Apps/NotifiPersistent.app"
