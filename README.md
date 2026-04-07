@@ -162,7 +162,7 @@ brew install --cask notificli
    - For persistent alerts, also run a test command: `notificli -m "Setup" -p` and follow the prompt.
 4. **Add to PATH** (optional):
    ```bash
-   ln -s /Applications/NotifiCLI.app/Contents/MacOS/NotifiCLI /usr/local/bin/notificli
+   ln -s /Applications/NotifiCLI.app/Contents/MacOS/notificli /usr/local/bin/notificli
    ```
 
 ### Build from Source
@@ -225,7 +225,7 @@ notificli -icon '/Applications/Keyboard Maestro.app' -title 'Macro' -message 'Fi
 notificli -icon 'KeyboardMaestro' -title 'Macro' -message 'Finished'  # shorthand
 ```
 
-> **Note**: macOS caches app icons. After using a new icon for the first time, a **reboot is required** for the icon to appear correctly in Notification Center.
+> **Note**: macOS caches app icons. If a new icon doesn't appear immediately, restart Notification Center: `killall NotificationCenter`.
 >
 > **Important (macOS Sequoia/Tahoe)**: On newer macOS versions, each custom icon variant acts as a unique app. The first time you use a new icon, it may be blocked from sending notifications.
 >

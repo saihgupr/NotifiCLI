@@ -187,6 +187,7 @@ for BASE_TYPE in "${VARIANTS[@]}"; do
         /usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier com.saihgupr.NotifiCLI.${VARIANT_NAME}" "${CONTENTS_DIR}/Info.plist"
         /usr/libexec/PlistBuddy -c "Set :CFBundleName '${DISPLAY_NAME}'" "${CONTENTS_DIR}/Info.plist"
     fi
+    /usr/libexec/PlistBuddy -c "Set :CFBundleExecutable ${APP_NAME}" "${CONTENTS_DIR}/Info.plist"
 
     # 2. Icon
     cp "$ICON_PATH" "${RESOURCES_DIR}/AppIcon.icns"

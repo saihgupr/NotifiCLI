@@ -119,6 +119,7 @@ if [ -d "$ICONS_DIR" ]; then
                 /usr/libexec/PlistBuddy -c "Set :CFBundleName '${VARIANT_DISPLAY_NAME}'" "${CONTENTS_DIR}/Info.plist"
                 /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string '${VARIANT_DISPLAY_NAME}'" "${CONTENTS_DIR}/Info.plist" 2>/dev/null || /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName '${VARIANT_DISPLAY_NAME}'" "${CONTENTS_DIR}/Info.plist"
             fi
+            /usr/libexec/PlistBuddy -c "Set :CFBundleExecutable ${APP_NAME}" "${CONTENTS_DIR}/Info.plist"
 
             # 2. Icon conversion or copy
             if [ "$EXTENSION" == "png" ]; then
@@ -161,10 +162,14 @@ if [ -d "$ICONS_DIR" ]; then
     done
 fi
 
-# --- 4. Install wrapper script into the app bundle ---
-echo "📦 Installing wrapper script..."
+# --- 4. Install wrapper script and support files into the app bundle ---
+echo "📦 Installing wrapper script and support files..."
 cp "${DIR}/notificli" "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/notificli"
 chmod +x "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/notificli"
+cp "${DIR}/add-icon.sh" "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/add-icon.sh"
+chmod +x "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/add-icon.sh"
+mkdir -p "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/scripts"
+cp "${DIR}/scripts/extract-icon.swift" "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/scripts/extract-icon.swift"
 
 # Final sign of the host app bundle (after all variants and the wrapper are embedded)
 xattr -cr "${BUILD_DIR}/NotifiCLI.app"
@@ -177,9 +182,13 @@ if [ -d "$INSTALLED_APPS_DIR" ] && [ -w "$INSTALLED_APPS_DIR" ]; then
     echo "📦 Installing variants to /Applications..."
     # Copy all apps from the embedded Apps folder to ensure all variants are updated
     cp -R "$APPS_DIR/"* "$INSTALLED_APPS_DIR/"
-    # Install wrapper script
+    # Install wrapper script and support files
     cp "${DIR}/notificli" "/Applications/NotifiCLI.app/Contents/MacOS/notificli"
     chmod +x "/Applications/NotifiCLI.app/Contents/MacOS/notificli"
+    cp "${DIR}/add-icon.sh" "/Applications/NotifiCLI.app/Contents/MacOS/add-icon.sh"
+    chmod +x "/Applications/NotifiCLI.app/Contents/MacOS/add-icon.sh"
+    mkdir -p "/Applications/NotifiCLI.app/Contents/MacOS/scripts"
+    cp "${DIR}/scripts/extract-icon.swift" "/Applications/NotifiCLI.app/Contents/MacOS/scripts/extract-icon.swift"
     echo "✅ Installed all variants to /Applications/NotifiCLI.app"
 fi
 
