@@ -8,8 +8,6 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 - **Stdout scripting** — outputs clicked actions, reply text, or dismissals (terminal-notifier outputs nothing)
 - **Custom icons** — use any app's icon via `-icon`, with automatic caching shorthand
 
-## Usage
-
 <table>
   <tr>
     <td align="center" valign="top" width="50%">
