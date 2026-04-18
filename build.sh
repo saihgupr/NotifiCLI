@@ -189,6 +189,8 @@ if [ -d "$INSTALLED_APPS_DIR" ] && [ -w "$INSTALLED_APPS_DIR" ]; then
     chmod +x "/Applications/NotifiCLI.app/Contents/MacOS/add-icon.sh"
     mkdir -p "/Applications/NotifiCLI.app/Contents/MacOS/scripts"
     cp "${DIR}/scripts/extract-icon.swift" "/Applications/NotifiCLI.app/Contents/MacOS/scripts/extract-icon.swift"
+    xattr -cr "/Applications/NotifiCLI.app"
+    codesign --force --deep -s - "/Applications/NotifiCLI.app"
     echo "✅ Installed all variants to /Applications/NotifiCLI.app"
 fi
 

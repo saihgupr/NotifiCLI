@@ -130,7 +130,9 @@ if let replyPlaceholder = replyPlaceholder {
 
 if !actions.isEmpty {
     let customActions = actions.map { actionTitle in
-        UNNotificationAction(identifier: actionTitle, title: actionTitle, options: [])
+        // Foreground ensures Notification Center relaunches the app and delivers
+        // the selected action back to this waiting process.
+        UNNotificationAction(identifier: actionTitle, title: actionTitle, options: [.foreground])
     }
     notificationActions.append(contentsOf: customActions)
 }
