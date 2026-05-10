@@ -35,17 +35,14 @@ while [[ $# -gt 0 ]]; do
             IS_PERSISTENT=1
             shift # past argument
             ;;
-        -i|-icon|-a|-app)
+        -i|-icon|-app)
             ICON_NAME="$2"
             shift # past argument
             shift # past value
             ;;
-        -t)
-            PASSTHROUGH_ARGS+=("-title" "$2")
-            shift 2
-            ;;
-        -m)
-            PASSTHROUGH_ARGS+=("-message" "$2")
+        -t|-m|-s|-a|-r|-u|-v|-img)
+            # These are handled by the binary, pass them through
+            PASSTHROUGH_ARGS+=("$1" "$2")
             shift 2
             ;;
         -f|-foreground)

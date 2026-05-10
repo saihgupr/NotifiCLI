@@ -42,15 +42,18 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 | Flag | Shorthand | Description |
 | :--- | :--- | :--- |
 | `-title` | `-t` | The bold title of the notification. |
-| `-message` | `-m` | The body text/subtitle. |
+| `-message` | `-m` | The body text message. |
+| `-subtitle` | `-s` | (Optional) Secondary text line below the title. |
 | `-persistent` | `-p` | Notification stays on screen until dismissed. |
-| `-icon` \| `-app` | `-i` \| `-a` | Path to an `.app` (or just its name) to use its icon. |
-| `-subtitle` | | (Optional) Secondary text line below the title. |
-| `-actions` | | (Optional) Comma-separated list of button labels. |
-| `-image` | | (Optional) Path to an image file (right thumbnail). |
-| `-reply` | | (Optional) Adds a "Reply" button with text input. |
-| `-url` | | (Optional) Opens the specified URL when clicked. |
+| `-icon` \| `-app` | `-i` | Path to an `.app` (or its name) to use its icon. |
+| `-actions` | `-a` | (Optional) Comma-separated list of button labels. |
+| `-reply` | `-r` | (Optional) Adds a "Reply" button with text input. |
+| `-url` | `-u` | (Optional) Opens the specified URL when clicked. |
+| `-image` | `-img` | (Optional) Path to an image file (right thumbnail). |
 | `-sound` | | (Optional) System sound or file path. |
+| `-version` | `-v` | Display version information. |
+| `-foreground` | `-f` | Use foreground activation for action buttons. |
+| `-help` | | Display usage information. |
 
 ### Output Behavior
 When using `-actions`, `-reply`, or `-url`, the command waits for user interaction and prints the result:

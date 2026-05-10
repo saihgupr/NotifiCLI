@@ -45,7 +45,7 @@ while let arg = args.popFirst() {
         if let actionStr = args.popFirst() {
             actions = actionStr.split(separator: ",").map { String($0) }
         }
-    case "-image", "-i":
+    case "-image", "-img":
         imagePath = args.popFirst()
     case "-sound":
         soundName = args.popFirst()
@@ -64,7 +64,7 @@ while let arg = args.popFirst() {
 }
 
 guard let notificationTitle = title, let notificationMessage = message else {
-    print("Usage: NotifiCLI -t \"Title\" -m \"Message\" [-s \"Subtitle\"] [-a \"id:Title,id:Title\"] [-r \"Placeholder\"] [-u \"https://...\"] [-i \"/path/to/image.png\"] [-sound \"Name\"] [-foreground]")
+    print("Usage: NotifiCLI -t \"Title\" -m \"Message\" [-s \"Subtitle\"] [-a \"Action1,Action2\"] [-r \"Placeholder\"] [-u \"https://...\"] [-img \"/path/to/image.png\"] [-sound \"Name\"] [-v]")
     exit(1)
 }
 
