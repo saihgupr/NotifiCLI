@@ -48,6 +48,10 @@ while [[ $# -gt 0 ]]; do
             PASSTHROUGH_ARGS+=("-message" "$2")
             shift 2
             ;;
+        -f|-foreground)
+            PASSTHROUGH_ARGS+=("-foreground")
+            shift
+            ;;
         *)
             PASSTHROUGH_ARGS+=("$1")
             shift # past argument

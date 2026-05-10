@@ -2,6 +2,24 @@ import Foundation
 import UserNotifications
 import AppKit
 
+// MARK: - Logging
+func debugLog(_ message: String) {
+    let logPath = "/tmp/notificli.log"
+    let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .medium)
+    let logMessage = "[\(timestamp)] \(message)\n"
+    if let data = logMessage.data(using: .utf8) {
+        if FileManager.default.fileExists(atPath: logPath) {
+            if let fileHandle = FileHandle(forWritingAtPath: logPath) {
+                fileHandle.seekToEndOfFile()
+                fileHandle.write(data)
+                fileHandle.closeFile()
+            }
+        } else {
+            try? data.write(to: URL(fileURLWithPath: logPath))
+        }
+    }
+}
+
 // MARK: - Argument Parsing
 var title: String?
 var subtitle: String?
@@ -11,6 +29,7 @@ var imagePath: String?
 var soundName: String?
 var replyPlaceholder: String?
 var openUrl: String?
+var useForeground = false
 
 
 var args = CommandLine.arguments.dropFirst()
@@ -34,6 +53,8 @@ while let arg = args.popFirst() {
         replyPlaceholder = args.popFirst()
     case "-url":
         openUrl = args.popFirst()
+    case "-foreground":
+        useForeground = true
 
     default:
         break
@@ -41,9 +62,11 @@ while let arg = args.popFirst() {
 }
 
 guard let notificationTitle = title, let notificationMessage = message else {
-    print("Usage: NotifiCLI -title \"Title\" -message \"Message\" [-subtitle \"Subtitle\"] [-actions \"Yes,No\"] [-reply \"Placeholder\"] [-url \"https://...\"] [-image \"/path/to/image.png\"] [-sound \"Name\"] [-silent]")
+    print("Usage: NotifiCLI -title \"Title\" -message \"Message\" [-subtitle \"Subtitle\"] [-actions \"id:Title,id:Title\"] [-reply \"Placeholder\"] [-url \"https://...\"] [-image \"/path/to/image.png\"] [-sound \"Name\"] [-foreground]")
     exit(1)
 }
+
+debugLog("Running notification: \(notificationTitle) - \(notificationMessage)")
 
 // MARK: - Notification
 let center = UNUserNotificationCenter.current()
@@ -55,6 +78,8 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        debugLog("Received notification response: identifier=\(response.actionIdentifier)")
         
         // Handle Text Input
         if let textResponse = response as? UNTextInputNotificationResponse {
@@ -72,6 +97,7 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
             selectedAction = response.actionIdentifier
         }
         
+        debugLog("Selected action set to: \(selectedAction ?? "nil")")
         completionHandler()
         // No need to signal semaphore anymore, assuming we poll selectedAction
     }
@@ -129,10 +155,26 @@ if let replyPlaceholder = replyPlaceholder {
 }
 
 if !actions.isEmpty {
-    let customActions = actions.map { actionTitle in
-        // Foreground ensures Notification Center relaunches the app and delivers
-        // the selected action back to this waiting process.
-        UNNotificationAction(identifier: actionTitle, title: actionTitle, options: [.foreground])
+    let customActions = actions.map { actionString -> UNNotificationAction in
+        let parts = actionString.split(separator: ":", maxSplits: 1).map { String($0) }
+        let id: String
+        let actionTitle: String
+        
+        if parts.count == 2 {
+            id = parts[0].trimmingCharacters(in: .whitespaces)
+            actionTitle = parts[1].trimmingCharacters(in: .whitespaces)
+        } else {
+            id = actionString.trimmingCharacters(in: .whitespaces)
+            actionTitle = id
+        }
+        
+        var options: UNNotificationActionOptions = []
+        if useForeground {
+            options.insert(.foreground)
+        }
+        
+        debugLog("Registering action: id=\(id), title=\(actionTitle), options=\(options)")
+        return UNNotificationAction(identifier: id, title: actionTitle, options: options)
     }
     notificationActions.append(contentsOf: customActions)
 }
@@ -263,12 +305,18 @@ if let soundName = soundName {
 
 // Wait for user response if actions exist or reply is requested
 if !actions.isEmpty || replyPlaceholder != nil || openUrl != nil {
+    debugLog("Waiting for user response...")
     // Run the run loop until action is received
     while delegate.selectedAction == nil {
         RunLoop.current.run(mode: .default, before: Date(timeIntervalSinceNow: 0.1))
     }
     
     if let action = delegate.selectedAction {
+        debugLog("User responded with: \(action)")
         print(action)
+        fflush(stdout)
     }
+} else {
+    debugLog("No interactive elements, exiting.")
 }
+

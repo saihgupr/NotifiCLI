@@ -145,34 +145,54 @@ notificli -title 'Build Failed' -message 'Click to view logs' -url 'https://gith
 
 ## Installation
 
-### Quick Start (Homebrew)
+### Option 1: Homebrew (Recommended)
 
-The easiest way to install NotifiCLI and keep it updated is via the official Homebrew tap:
+The cleanest install — no security warnings, auto-updates via `brew upgrade`:
 
 ```bash
 brew tap saihgupr/notificli
 brew install --cask notificli
 ```
 
+Homebrew automatically removes macOS quarantine restrictions, so the app opens without any Gatekeeper dialog.
+
+---
+
+### Option 2: Manual DMG Install
+
+1. **Download `NotifiCLI.dmg`** from [Releases](https://github.com/saihgupr/NotifiCLI/releases)
+2. Open the DMG and drag **`NotifiCLI.app`** to your **Applications** folder
+3. **Fix the security warning** — on macOS Sequoia/Tahoe, double-clicking the app shows *"Apple could not verify..."* with no "Open Anyway" button. Use one of these fixes:
+   - **Easy**: Double-click **`Fix Security.command`** (included in the DMG) → Terminal opens, runs the fix, confirms with a dialog. *(macOS may ask permission to run it — click Allow.)*
+   - **Terminal**: `xattr -cr /Applications/NotifiCLI.app`
+4. Open **`NotifiCLI.app`** normally to grant notification permissions
+
+**Add to PATH** (optional):
+```bash
+ln -s /Applications/NotifiCLI.app/Contents/MacOS/notificli /usr/local/bin/notificli
+```
+
 <details>
-<summary><b>Manual Installation & Build</b></summary>
+<summary><b>Build from Source</b></summary>
 
-### Manual Installation
-1. **Download NotifiCLI.dmg** from [Releases](https://github.com/saihgupr/NotifiCLI/releases)
-2. **Open the DMG** and drag `NotifiCLI.app` to your `Applications` folder.
-3. **Grant permissions**:
-   - Double-click `NotifiCLI.app` to allow notifications.
-   - For persistent alerts, also run a test command: `notificli -m "Setup" -p` and follow the prompt.
-4. **Add to PATH** (optional):
-   ```bash
-   ln -s /Applications/NotifiCLI.app/Contents/MacOS/notificli /usr/local/bin/notificli
-   ```
-
-### Build from Source
 ```bash
 ./build.sh
 ```
 </details>
+
+## 🔐 Security & Gatekeeper (macOS)
+
+NotifiCLI is not signed with a paid Apple Developer certificate. On macOS Sequoia and Tahoe, this means the app shows **only "Move to Trash"** when first launched — the "Open Anyway" button no longer appears.
+
+**The fix is a one-liner:**
+```bash
+xattr -cr /Applications/NotifiCLI.app
+```
+
+Or use the **`Fix Security.command`** included in the DMG — just double-click it after dragging the app to Applications.
+
+> [!TIP]
+> Avoid all of this by installing via **Homebrew**, which handles quarantine automatically.
 
 <details>
 <summary><b>Keyboard Maestro Plug-in</b></summary>

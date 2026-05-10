@@ -5,11 +5,12 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="${DIR}/build"
 DMG_MAKER_DIR="${DIR}/../DMGMaker"
-VERSION="1.3.4"
+VERSION="1.4.1"
 OUTPUT_NAME="NotifiCLI"
 
 echo "🔨 Starting clean build for v${VERSION}..."
 ./build.sh
+cp "Fix Security.command" "${BUILD_DIR}/"
 
 echo "🔍 Verifying build contents..."
 APPS_COUNT=$(ls -1 "${BUILD_DIR}/NotifiCLI.app/Contents/Apps" 2>/dev/null | wc -l)
