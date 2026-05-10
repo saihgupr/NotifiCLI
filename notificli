@@ -71,6 +71,8 @@ if [ -n "$ICON_NAME" ]; then
             APP_PATH_ARG="/System/Applications/${ICON_NAME}.app"
         elif [ -d "/System/Applications/Utilities/${ICON_NAME}.app" ]; then
             APP_PATH_ARG="/System/Applications/Utilities/${ICON_NAME}.app"
+        elif [ -d "/System/Library/CoreServices/${ICON_NAME}.app" ]; then
+            APP_PATH_ARG="/System/Library/CoreServices/${ICON_NAME}.app"
         else
             # Default to just the name in /Applications even if not found yet (for error reporting later)
             APP_PATH_ARG="/Applications/${ICON_NAME}.app"
