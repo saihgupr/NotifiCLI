@@ -35,34 +35,36 @@ var useForeground = false
 var args = CommandLine.arguments.dropFirst()
 while let arg = args.popFirst() {
     switch arg {
-    case "-title":
+    case "-title", "-t":
         title = args.popFirst()
-    case "-subtitle":
+    case "-subtitle", "-s":
         subtitle = args.popFirst()
-    case "-message":
+    case "-message", "-m":
         message = args.popFirst()
-    case "-actions":
+    case "-actions", "-a":
         if let actionStr = args.popFirst() {
             actions = actionStr.split(separator: ",").map { String($0) }
         }
-    case "-image":
+    case "-image", "-i":
         imagePath = args.popFirst()
     case "-sound":
         soundName = args.popFirst()
-    case "-reply":
+    case "-reply", "-r":
         replyPlaceholder = args.popFirst()
-    case "-url":
+    case "-url", "-u":
         openUrl = args.popFirst()
     case "-foreground":
         useForeground = true
-
+    case "-version", "-v":
+        print("NotifiCLI v1.4.1")
+        exit(0)
     default:
         break
     }
 }
 
 guard let notificationTitle = title, let notificationMessage = message else {
-    print("Usage: NotifiCLI -title \"Title\" -message \"Message\" [-subtitle \"Subtitle\"] [-actions \"id:Title,id:Title\"] [-reply \"Placeholder\"] [-url \"https://...\"] [-image \"/path/to/image.png\"] [-sound \"Name\"] [-foreground]")
+    print("Usage: NotifiCLI -t \"Title\" -m \"Message\" [-s \"Subtitle\"] [-a \"id:Title,id:Title\"] [-r \"Placeholder\"] [-u \"https://...\"] [-i \"/path/to/image.png\"] [-sound \"Name\"] [-foreground]")
     exit(1)
 }
 
