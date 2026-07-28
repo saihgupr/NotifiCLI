@@ -11,11 +11,16 @@ while [ -h "$SOURCE" ]; do
 done
 PROJECT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-# Resolve App directory (prefer /Applications for permissions)
+# Resolve App directory (prefer /Applications or Homebrew Cask appdir for permissions)
+BUNDLED_APP_DIR="$(cd -P "${PROJECT_DIR}/../../" >/dev/null 2>&1 && pwd)"
 if [ -d "/Applications/NotifiCLI.app" ]; then
     APP_DIR="/Applications/NotifiCLI.app"
 elif [ -d "${HOME}/Applications/NotifiCLI.app" ]; then
     APP_DIR="${HOME}/Applications/NotifiCLI.app"
+elif [ -f "${BUNDLED_APP_DIR}/Contents/MacOS/NotifiCLI-Binary" ]; then
+    APP_DIR="${BUNDLED_APP_DIR}"
+elif [ -f "${PROJECT_DIR}/NotifiCLI-Binary" ]; then
+    APP_DIR="$(cd -P "${PROJECT_DIR}/../../" >/dev/null 2>&1 && pwd)"
 else
     APP_DIR="${PROJECT_DIR}/build/NotifiCLI.app"
 fi
