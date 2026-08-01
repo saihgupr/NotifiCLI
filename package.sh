@@ -5,7 +5,7 @@ set -e
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="${DIR}/build"
 DMG_MAKER_DIR="${DIR}/../DMGMaker"
-VERSION="1.4.1"
+VERSION="1.4.2"
 OUTPUT_NAME="NotifiCLI"
 
 echo "🔨 Starting clean build for v${VERSION}..."
