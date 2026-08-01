@@ -11,11 +11,16 @@ while [ -h "$SOURCE" ]; do
 done
 PROJECT_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-# Resolve App directory (prefer /Applications for permissions)
+# Resolve App directory (prefer /Applications or Homebrew Cask appdir for permissions)
+BUNDLED_APP_DIR="$(cd -P "${PROJECT_DIR}/../../" >/dev/null 2>&1 && pwd)"
 if [ -d "/Applications/NotifiCLI.app" ]; then
     APP_DIR="/Applications/NotifiCLI.app"
 elif [ -d "${HOME}/Applications/NotifiCLI.app" ]; then
     APP_DIR="${HOME}/Applications/NotifiCLI.app"
+elif [ -f "${BUNDLED_APP_DIR}/Contents/MacOS/NotifiCLI-Binary" ]; then
+    APP_DIR="${BUNDLED_APP_DIR}"
+elif [ -f "${PROJECT_DIR}/NotifiCLI-Binary" ]; then
+    APP_DIR="$(cd -P "${PROJECT_DIR}/../../" >/dev/null 2>&1 && pwd)"
 else
     APP_DIR="${PROJECT_DIR}/build/NotifiCLI.app"
 fi
@@ -26,27 +31,30 @@ IS_PERSISTENT=0
 ICON_NAME=""
 PASSTHROUGH_ARGS=()
 
-# Parse arguments to find special flags (-persistent, -icon, -app)
-# and handle shorthands for the binary (-t -> -title, -m -> -message)
+# Parse arguments to find special flags (-persistent, --persistent, -icon, --icon, -app, --app)
+# and handle shorthands for the binary (-t -> --title, -m -> --message)
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
-        -p|-persistent)
+        -p|-persistent|--persistent)
             IS_PERSISTENT=1
             shift # past argument
             ;;
-        -i|-icon|-app)
+        -i|-icon|--icon|-a|-app|--app)
             ICON_NAME="$2"
             shift # past argument
             shift # past value
             ;;
-        -t|-m|-s|-a|-r|-u|-v|-img)
-            # These are handled by the binary, pass them through
-            PASSTHROUGH_ARGS+=("$1" "$2")
+        -t|--t)
+            PASSTHROUGH_ARGS+=("--title" "$2")
             shift 2
             ;;
-        -f|-foreground)
-            PASSTHROUGH_ARGS+=("-foreground")
+        -m|--m)
+            PASSTHROUGH_ARGS+=("--message" "$2")
+            shift 2
+            ;;
+        -f|-foreground|--foreground)
+            PASSTHROUGH_ARGS+=("--foreground")
             shift
             ;;
         *)
@@ -71,8 +79,6 @@ if [ -n "$ICON_NAME" ]; then
             APP_PATH_ARG="/System/Applications/${ICON_NAME}.app"
         elif [ -d "/System/Applications/Utilities/${ICON_NAME}.app" ]; then
             APP_PATH_ARG="/System/Applications/Utilities/${ICON_NAME}.app"
-        elif [ -d "/System/Library/CoreServices/${ICON_NAME}.app" ]; then
-            APP_PATH_ARG="/System/Library/CoreServices/${ICON_NAME}.app"
         else
             # Default to just the name in /Applications even if not found yet (for error reporting later)
             APP_PATH_ARG="/Applications/${ICON_NAME}.app"
@@ -118,11 +124,11 @@ if [ -n "$VARIANT_NAME" ]; then
     # If variant doesn't exist yet, attempt to generate it
     if [ ! -f "$VARIANT_PATH" ]; then
          if [ -n "$APP_PATH_ARG" ]; then
-              echo "Generating new icon variant for '${BASE_NAME}'..."
+              echo "⚙️  Generating new icon variant for '${BASE_NAME}'..."
               "${PROJECT_DIR}/add-icon.sh" "$APP_PATH_ARG" "$VARIANT_NAME" "$BASE_NAME"
               EXIT_CODE=$?
               if [ $EXIT_CODE -ne 0 ]; then
-                  echo "Warning: Icon generation failed (Code $EXIT_CODE). Falling back to default icon."
+                  echo "⚠️  Icon generation failed (Code $EXIT_CODE). Falling back to default icon."
               else
                   # Re-resolve after generation, prioritizing /Applications if it was installed there
                   if [ -f "${APP_DIR}/Contents/Apps/${VARIANT_BINARY}.app/Contents/MacOS/${VARIANT_BINARY}" ]; then
@@ -187,7 +193,7 @@ if [ $EXIT_CODE -ne 0 ] && [[ "$OUTPUT" == *"Notifications are not allowed"* ]];
         fi
     fi
 
-    echo "Notification permission missing for '${FRIENDLY_NAME}'. Requesting authorization..."
+    echo "⚙️  Notification permission missing for '${FRIENDLY_NAME}'. Requesting authorization..."
     
     # Re-trigger blessing: register with LaunchServices and open to prompt authorization
     # Use absolute path for lsregister
@@ -196,7 +202,7 @@ if [ $EXIT_CODE -ne 0 ] && [[ "$OUTPUT" == *"Notifications are not allowed"* ]];
     open "$TARGET_BUNDLE" 2>/dev/null || true
     
     echo ""
-    echo "Note: A permission prompt should appear. If not, enable notifications manually:"
+    echo "💡 A permission prompt should appear. If not, enable notifications manually:"
     echo "   System Settings > Notifications > ${FRIENDLY_NAME}"
     echo ""
     echo "Then re-run your command."

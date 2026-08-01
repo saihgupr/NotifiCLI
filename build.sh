@@ -8,7 +8,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Backup existing binaries if main.swift doesn't exist
 if [ ! -f "main.swift" ]; then
-    echo "main.swift not found, preserving existing binaries..."
+    echo "⚠️  main.swift not found, preserving existing binaries..."
     if [ -f "$BUILD_DIR/NotifiCLI.app/Contents/MacOS/NotifiCLI" ]; then
         mkdir -p "$BACKUP_DIR"
         cp "$BUILD_DIR/NotifiCLI.app/Contents/MacOS/NotifiCLI" "$BACKUP_DIR/NotifiCLI"
@@ -24,7 +24,7 @@ mkdir -p "$BUILD_DIR"
 BASE_APPS=("NotifiCLI" "NotifiPersistent")
 
 for APP_NAME in "${BASE_APPS[@]}"; do
-    echo "Building $APP_NAME..."
+    echo "🔨 Building $APP_NAME..."
     APP_BUNDLE="${BUILD_DIR}/${APP_NAME}.app"
     CONTENTS_DIR="${APP_BUNDLE}/Contents"
     MACOS_DIR="${CONTENTS_DIR}/MacOS"
@@ -60,23 +60,23 @@ for APP_NAME in "${BASE_APPS[@]}"; do
             cp "$BACKUP_DIR/NotifiCLI" "${MACOS_DIR}/${APP_NAME}"
         fi
     else
-        echo "Error: No main.swift and no existing binary to copy!"
+        echo "❌ Error: No main.swift and no existing binary to copy!"
         exit 1
     fi
 
     # Ad-hoc sign
     xattr -cr "$APP_BUNDLE"
     codesign --force --deep -s - "$APP_BUNDLE"
-    echo "Built ${APP_BUNDLE}"
+    echo "✅ Built ${APP_BUNDLE}"
 done
 
 # Embed NotifiPersistent inside NotifiCLI.app/Contents/Apps/
-echo "Embedding NotifiPersistent inside NotifiCLI..."
+echo "📦 Embedding NotifiPersistent inside NotifiCLI..."
 APPS_DIR="${BUILD_DIR}/NotifiCLI.app/Contents/Apps"
 mkdir -p "$APPS_DIR"
 mv "${BUILD_DIR}/NotifiPersistent.app" "$APPS_DIR/"
 
-echo "NotifiPersistent embedded in NotifiCLI.app/Contents/Apps/"
+echo "✅ NotifiPersistent embedded in NotifiCLI.app/Contents/Apps/"
 
 # Cleanup backup
 rm -rf "$BACKUP_DIR"
@@ -98,7 +98,7 @@ if [ -d "$ICONS_DIR" ]; then
         
         for BASE_TYPE in "${VARIANTS[@]}"; do
             APP_NAME="${BASE_TYPE}-${VARIANT_NAME}"
-            echo "Building icon variant: $APP_NAME..."
+            echo "🎨 Building icon variant: $APP_NAME..."
             
             APP_BUNDLE="${BUILD_DIR}/${APP_NAME}.app"
             CONTENTS_DIR="${APP_BUNDLE}/Contents"
@@ -158,12 +158,12 @@ if [ -d "$ICONS_DIR" ]; then
             mv "$APP_BUNDLE" "${BUILD_DIR}/NotifiCLI.app/Contents/Apps/"
             # echo "✅ Built and embedded ${APP_NAME} into NotifiCLI"
         done
-        echo "Built standard and persistent variants for '${VARIANT_NAME}'"
+        echo "✅ Built standard and persistent variants for '${VARIANT_NAME}'"
     done
 fi
 
 # --- 4. Install wrapper script and support files into the app bundle ---
-echo "Installing wrapper script and support files..."
+echo "📦 Installing wrapper script and support files..."
 cp "${DIR}/notificli" "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/notificli"
 chmod +x "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/notificli"
 cp "${DIR}/add-icon.sh" "${BUILD_DIR}/NotifiCLI.app/Contents/MacOS/add-icon.sh"
@@ -174,12 +174,12 @@ cp "${DIR}/scripts/extract-icon.swift" "${BUILD_DIR}/NotifiCLI.app/Contents/MacO
 # Final sign of the host app bundle (after all variants and the wrapper are embedded)
 xattr -cr "${BUILD_DIR}/NotifiCLI.app"
 codesign --force --deep -s - "${BUILD_DIR}/NotifiCLI.app"
-echo "Final sign of NotifiCLI.app complete"
+echo "✅ Final sign of NotifiCLI.app complete"
 
 # --- 5. Attempt to Install to /Applications ---
 INSTALLED_APPS_DIR="/Applications/NotifiCLI.app/Contents/Apps"
 if [ -d "$INSTALLED_APPS_DIR" ] && [ -w "$INSTALLED_APPS_DIR" ]; then
-    echo "Installing variants to /Applications..."
+    echo "📦 Installing variants to /Applications..."
     # Copy all apps from the embedded Apps folder to ensure all variants are updated
     cp -R "$APPS_DIR/"* "$INSTALLED_APPS_DIR/"
     # Install wrapper script and support files
@@ -191,11 +191,11 @@ if [ -d "$INSTALLED_APPS_DIR" ] && [ -w "$INSTALLED_APPS_DIR" ]; then
     cp "${DIR}/scripts/extract-icon.swift" "/Applications/NotifiCLI.app/Contents/MacOS/scripts/extract-icon.swift"
     xattr -cr "/Applications/NotifiCLI.app"
     codesign --force --deep -s - "/Applications/NotifiCLI.app"
-    echo "Installed all variants to /Applications/NotifiCLI.app"
+    echo "✅ Installed all variants to /Applications/NotifiCLI.app"
 fi
 
 echo ""
-echo "All builds complete."
+echo "🎉 All builds complete."
 echo ""
 echo "Usage:"
 echo "  notificli [args]                    # Default icon"

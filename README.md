@@ -3,10 +3,10 @@
 A lightweight, headless macOS command-line tool for sending actionable, persistent notifications.
 
 Unlike `terminal-notifier`, NotifiCLI offers:
-- **Reply input** - capture typed responses with `-reply` (removed from terminal-notifier in v1.7)
-- **Per-notification persistence** - use the `-persistent` flag instead of a system-wide setting
-- **Stdout scripting** - outputs clicked actions, reply text, or dismissals (terminal-notifier outputs nothing)
-- **Custom icons** - use any app's icon via `-icon`, with automatic caching shorthand
+- **Reply input** — capture typed responses with `-reply` (removed from terminal-notifier in v1.7)
+- **Per-notification persistence** — use the `-persistent` flag instead of a system-wide setting
+- **Stdout scripting** — outputs clicked actions, reply text, or dismissals (terminal-notifier outputs nothing)
+- **Custom icons** — use any app's icon via `-icon`, with automatic caching shorthand
 
 <table>
   <tr>
@@ -39,21 +39,20 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 <summary><b>Full Parameter List & Arguments</b></summary>
 
 ### Arguments
+Both standard double-dash (`--flag`) and legacy single-dash (`-flag`) forms are supported.
+
 | Flag | Shorthand | Description |
 | :--- | :--- | :--- |
-| `-title` | `-t` | The bold title of the notification. |
-| `-message` | `-m` | The body text message. |
-| `-subtitle` | `-s` | (Optional) Secondary text line below the title. |
-| `-persistent` | `-p` | Notification stays on screen until dismissed. |
-| `-icon` \| `-app` | `-i` | Path to an `.app` (or its name) to use its icon. |
-| `-actions` | `-a` | (Optional) Comma-separated list of button labels. |
-| `-reply` | `-r` | (Optional) Adds a "Reply" button with text input. |
-| `-url` | `-u` | (Optional) Opens the specified URL when clicked. |
-| `-image` | `-img` | (Optional) Path to an image file (right thumbnail). |
-| `-sound` | | (Optional) System sound or file path. |
-| `-version` | `-v` | Display version information. |
-| `-foreground` | `-f` | Use foreground activation for action buttons. |
-| `-help` | | Display usage information. |
+| `--title` / `-title` | `-t` | The bold title of the notification. |
+| `--message` / `-message` | `-m` | The body text/subtitle. |
+| `--persistent` / `-persistent` | `-p` | Notification stays on screen until dismissed. |
+| `--icon` / `--app` / `-icon` / `-app` | `-i` / `-a` | Path to an `.app` (or just its name) to use its icon. |
+| `--subtitle` / `-subtitle` | | (Optional) Secondary text line below the title. |
+| `--actions` / `-actions` | | (Optional) Comma-separated list of button labels. |
+| `--image` / `--img` / `-image` / `-img` | | (Optional) Path to an image file (right thumbnail). |
+| `--reply` / `-reply` | | (Optional) Adds a "Reply" button with text input. |
+| `--url` / `-url` | | (Optional) Opens the specified URL when clicked. |
+| `--sound` / `-sound` | | (Optional) System sound or file path. |
 
 ### Output Behavior
 When using `-actions`, `-reply`, or `-url`, the command waits for user interaction and prints the result:
@@ -150,7 +149,7 @@ notificli -title 'Build Failed' -message 'Click to view logs' -url 'https://gith
 
 ### Option 1: Homebrew (Recommended)
 
-The cleanest install - no security warnings, auto-updates via `brew upgrade`:
+The cleanest install — no security warnings, auto-updates via `brew upgrade`:
 
 ```bash
 brew tap saihgupr/notificli
@@ -165,8 +164,8 @@ Homebrew automatically removes macOS quarantine restrictions, so the app opens w
 
 1. **Download `NotifiCLI.dmg`** from [Releases](https://github.com/saihgupr/NotifiCLI/releases)
 2. Open the DMG and drag **`NotifiCLI.app`** to your **Applications** folder
-3. **Fix the security warning** - on macOS Sequoia/Tahoe, double-clicking the app shows *"Apple could not verify..."* with no "Open Anyway" button. Use one of these fixes:
-   - **Easy**: Double-click **`Fix Security.command`** (included in the DMG) -> Terminal opens, runs the fix, confirms with a dialog. *(macOS may ask permission to run it - click Allow.)*
+3. **Fix the security warning** — on macOS Sequoia/Tahoe, double-clicking the app shows *"Apple could not verify..."* with no "Open Anyway" button. Use one of these fixes:
+   - **Easy**: Double-click **`Fix Security.command`** (included in the DMG) → Terminal opens, runs the fix, confirms with a dialog. *(macOS may ask permission to run it — click Allow.)*
    - **Terminal**: `xattr -cr /Applications/NotifiCLI.app`
 4. Open **`NotifiCLI.app`** normally to grant notification permissions
 
@@ -183,16 +182,16 @@ ln -s /Applications/NotifiCLI.app/Contents/MacOS/notificli /usr/local/bin/notifi
 ```
 </details>
 
-## Security & Gatekeeper (macOS)
+## 🔐 Security & Gatekeeper (macOS)
 
-NotifiCLI is not signed with a paid Apple Developer certificate. On macOS Sequoia and Tahoe, this means the app shows **only "Move to Trash"** when first launched - the "Open Anyway" button no longer appears.
+NotifiCLI is not signed with a paid Apple Developer certificate. On macOS Sequoia and Tahoe, this means the app shows **only "Move to Trash"** when first launched — the "Open Anyway" button no longer appears.
 
 **The fix is a one-liner:**
 ```bash
 xattr -cr /Applications/NotifiCLI.app
 ```
 
-Or use the **`Fix Security.command`** included in the DMG - just double-click it after dragging the app to Applications.
+Or use the **`Fix Security.command`** included in the DMG — just double-click it after dragging the app to Applications.
 
 > [!TIP]
 > Avoid all of this by installing via **Homebrew**, which handles quarantine automatically.

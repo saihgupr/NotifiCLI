@@ -20,7 +20,7 @@ if [ -z "$APP_PATH" ] || [ -z "$VARIANT_NAME" ]; then
 fi
 
 if [ ! -d "$APP_PATH" ]; then
-    echo "Error: App not found: $APP_PATH"
+    echo "❌ Error: App not found: $APP_PATH"
     exit 1
 fi
 
@@ -33,7 +33,7 @@ if [ -d "$BUILD_DIR/NotifiCLI.app" ]; then
 elif [ -d "/Applications/NotifiCLI.app" ]; then
     BASE_SRC="/Applications/NotifiCLI.app"
 else
-    echo "Error: NotifiCLI base app not found in build/ or /Applications."
+    echo "❌ Error: NotifiCLI base app not found in build/ or /Applications."
     echo "   Please run ./build.sh once to create the base application."
     exit 1
 fi
@@ -47,7 +47,7 @@ if [ ! -f "$PERSISTENT_BIN" ] && [ -d "$BUILD_DIR/NotifiPersistent.app" ]; then
 fi
 
 if [ ! -f "$NOTIFICLI_BIN" ]; then
-    echo "Error: NotifiCLI binary not found at $NOTIFICLI_BIN"
+    echo "❌ Error: NotifiCLI binary not found at $NOTIFICLI_BIN"
     exit 1
 fi
 
@@ -72,7 +72,7 @@ fi
 # Find the app icon from Info.plist
 PLIST="$APP_PATH/Contents/Info.plist"
 if [ ! -f "$PLIST" ]; then
-    echo "Error: No Info.plist found in target app"
+    echo "❌ Error: No Info.plist found in target app"
     exit 1
 fi
 
@@ -142,7 +142,7 @@ if [ -z "$ICON_PATH" ] || [ ! -f "$ICON_PATH" ]; then
 fi
 
 if [ -z "$ICON_PATH" ] || [ ! -f "$ICON_PATH" ]; then
-    echo "Error: Icon not found for app at $APP_PATH"
+    echo "❌ Error: Icon not found for app at $APP_PATH"
     exit 1
 fi
 
@@ -211,14 +211,14 @@ for BASE_TYPE in "${VARIANTS[@]}"; do
     xattr -d com.apple.quarantine "$TARGET_APP" 2>/dev/null || true
 done
 
-echo "Created variant: $VARIANT_NAME"
+echo "✅ Created variant: $VARIANT_NAME"
 
 # --- 4. Attempt to Install to /Applications ---
 
 INSTALLED_APPS_DIR="/Applications/NotifiCLI.app/Contents/Apps"
 if [ -d "$INSTALLED_APPS_DIR" ] && [ -w "$INSTALLED_APPS_DIR" ]; then
-    echo "Installing to /Applications..."
+    echo "📦 Installing to /Applications..."
     cp -R "$APPS_DIR/NotifiCLI-${VARIANT_NAME}.app" "$INSTALLED_APPS_DIR/"
     cp -R "$APPS_DIR/NotifiPersistent-${VARIANT_NAME}.app" "$INSTALLED_APPS_DIR/"
-    echo "Installed to /Applications/NotifiCLI.app"
+    echo "✅ Installed to /Applications/NotifiCLI.app"
 fi
