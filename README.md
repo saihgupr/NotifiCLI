@@ -47,7 +47,7 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 | `-icon` \| `-app` | `-i` \| `-a` | Path to an `.app` (or just its name) to use its icon. |
 | `-subtitle` | | (Optional) Secondary text line below the title. |
 | `-actions` | | (Optional) Comma-separated list of button labels. |
-| `-image` | | (Optional) Path to an image file (right thumbnail). |
+| `-image` \| `-img` | | (Optional) Path to an image file (right thumbnail). |
 | `-reply` | | (Optional) Adds a "Reply" button with text input. |
 | `-url` | | (Optional) Opens the specified URL when clicked. |
 | `-sound` | | (Optional) System sound or file path. |

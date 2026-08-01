@@ -45,7 +45,7 @@ while let arg = args.popFirst() {
         if let actionStr = args.popFirst() {
             actions = actionStr.split(separator: ",").map { String($0) }
         }
-    case "-image":
+    case "-image", "--image", "-img", "--img":
         imagePath = args.popFirst()
     case "-sound":
         soundName = args.popFirst()
