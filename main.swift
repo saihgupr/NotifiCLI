@@ -35,25 +35,25 @@ var useForeground = false
 var args = CommandLine.arguments.dropFirst()
 while let arg = args.popFirst() {
     switch arg {
-    case "-title":
+    case "-title", "--title":
         title = args.popFirst()
-    case "-subtitle":
+    case "-subtitle", "--subtitle":
         subtitle = args.popFirst()
-    case "-message":
+    case "-message", "--message":
         message = args.popFirst()
-    case "-actions":
+    case "-actions", "--actions":
         if let actionStr = args.popFirst() {
             actions = actionStr.split(separator: ",").map { String($0) }
         }
-    case "-image":
+    case "-image", "--image", "-img", "--img":
         imagePath = args.popFirst()
-    case "-sound":
+    case "-sound", "--sound":
         soundName = args.popFirst()
-    case "-reply":
+    case "-reply", "--reply":
         replyPlaceholder = args.popFirst()
-    case "-url":
+    case "-url", "--url":
         openUrl = args.popFirst()
-    case "-foreground":
+    case "-foreground", "--foreground":
         useForeground = true
 
     default:
@@ -62,7 +62,8 @@ while let arg = args.popFirst() {
 }
 
 guard let notificationTitle = title, let notificationMessage = message else {
-    print("Usage: NotifiCLI -title \"Title\" -message \"Message\" [-subtitle \"Subtitle\"] [-actions \"id:Title,id:Title\"] [-reply \"Placeholder\"] [-url \"https://...\"] [-image \"/path/to/image.png\"] [-sound \"Name\"] [-foreground]")
+    print("Usage: NotifiCLI --title \"Title\" --message \"Message\" [--subtitle \"Subtitle\"] [--actions \"id:Title,id:Title\"] [--reply \"Placeholder\"] [--url \"https://...\"] [--image \"/path/to/image.png\"] [--sound \"Name\"] [--foreground]")
+    print("Note: Single-dash flags (e.g. -title) are also supported for backward compatibility.")
     exit(1)
 }
 

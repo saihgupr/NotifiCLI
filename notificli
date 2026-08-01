@@ -31,30 +31,30 @@ IS_PERSISTENT=0
 ICON_NAME=""
 PASSTHROUGH_ARGS=()
 
-# Parse arguments to find special flags (-persistent, -icon, -app)
-# and handle shorthands for the binary (-t -> -title, -m -> -message)
+# Parse arguments to find special flags (-persistent, --persistent, -icon, --icon, -app, --app)
+# and handle shorthands for the binary (-t -> --title, -m -> --message)
 while [[ $# -gt 0 ]]; do
     key="$1"
     case $key in
-        -p|-persistent)
+        -p|-persistent|--persistent)
             IS_PERSISTENT=1
             shift # past argument
             ;;
-        -i|-icon|-a|-app)
+        -i|-icon|--icon|-a|-app|--app)
             ICON_NAME="$2"
             shift # past argument
             shift # past value
             ;;
-        -t)
-            PASSTHROUGH_ARGS+=("-title" "$2")
+        -t|--t)
+            PASSTHROUGH_ARGS+=("--title" "$2")
             shift 2
             ;;
-        -m)
-            PASSTHROUGH_ARGS+=("-message" "$2")
+        -m|--m)
+            PASSTHROUGH_ARGS+=("--message" "$2")
             shift 2
             ;;
-        -f|-foreground)
-            PASSTHROUGH_ARGS+=("-foreground")
+        -f|-foreground|--foreground)
+            PASSTHROUGH_ARGS+=("--foreground")
             shift
             ;;
         *)

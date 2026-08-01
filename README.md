@@ -39,18 +39,20 @@ Unlike `terminal-notifier`, NotifiCLI offers:
 <summary><b>Full Parameter List & Arguments</b></summary>
 
 ### Arguments
+Both standard double-dash (`--flag`) and legacy single-dash (`-flag`) forms are supported.
+
 | Flag | Shorthand | Description |
 | :--- | :--- | :--- |
-| `-title` | `-t` | The bold title of the notification. |
-| `-message` | `-m` | The body text/subtitle. |
-| `-persistent` | `-p` | Notification stays on screen until dismissed. |
-| `-icon` \| `-app` | `-i` \| `-a` | Path to an `.app` (or just its name) to use its icon. |
-| `-subtitle` | | (Optional) Secondary text line below the title. |
-| `-actions` | | (Optional) Comma-separated list of button labels. |
-| `-image` | | (Optional) Path to an image file (right thumbnail). |
-| `-reply` | | (Optional) Adds a "Reply" button with text input. |
-| `-url` | | (Optional) Opens the specified URL when clicked. |
-| `-sound` | | (Optional) System sound or file path. |
+| `--title` / `-title` | `-t` | The bold title of the notification. |
+| `--message` / `-message` | `-m` | The body text/subtitle. |
+| `--persistent` / `-persistent` | `-p` | Notification stays on screen until dismissed. |
+| `--icon` / `--app` / `-icon` / `-app` | `-i` / `-a` | Path to an `.app` (or just its name) to use its icon. |
+| `--subtitle` / `-subtitle` | | (Optional) Secondary text line below the title. |
+| `--actions` / `-actions` | | (Optional) Comma-separated list of button labels. |
+| `--image` / `--img` / `-image` / `-img` | | (Optional) Path to an image file (right thumbnail). |
+| `--reply` / `-reply` | | (Optional) Adds a "Reply" button with text input. |
+| `--url` / `-url` | | (Optional) Opens the specified URL when clicked. |
+| `--sound` / `-sound` | | (Optional) System sound or file path. |
 
 ### Output Behavior
 When using `-actions`, `-reply`, or `-url`, the command waits for user interaction and prints the result:
