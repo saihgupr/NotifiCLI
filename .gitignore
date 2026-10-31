@@ -31,3 +31,6 @@ logs/
 deploy.sh
 
 .git-backup-*
+
+# Release artifacts (attach to GitHub Releases instead)
+*.dmg

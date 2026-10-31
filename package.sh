@@ -29,12 +29,11 @@ cd "$DMG_MAKER_DIR"
 swift run "DMG Maker" --app "${BUILD_DIR}/NotifiCLI.app" --name "$OUTPUT_NAME"
 cd "$DIR"
 
-# Move the DMG from build/ to project root for easy access
+# Leave the DMG in build/; it gets attached to GitHub Releases, not committed
 if [ -f "${BUILD_DIR}/${OUTPUT_NAME}.dmg" ]; then
-    mv "${BUILD_DIR}/${OUTPUT_NAME}.dmg" "${DIR}/"
-    echo "✨ DMG created: ${DIR}/${OUTPUT_NAME}.dmg"
-    echo "📊 Size: $(du -sh "${DIR}/${OUTPUT_NAME}.dmg" | cut -f1)"
-    echo "🔐 SHA256: $(shasum -a 256 "${DIR}/${OUTPUT_NAME}.dmg" | cut -d' ' -f1)"
+    echo "✨ DMG created: ${BUILD_DIR}/${OUTPUT_NAME}.dmg"
+    echo "📊 Size: $(du -sh "${BUILD_DIR}/${OUTPUT_NAME}.dmg" | cut -f1)"
+    echo "🔐 SHA256: $(shasum -a 256 "${BUILD_DIR}/${OUTPUT_NAME}.dmg" | cut -d' ' -f1)"
 else
     echo "❌ Error: DMG was not created at ${BUILD_DIR}/${OUTPUT_NAME}.dmg"
     exit 1
